@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Flow" Class="DatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Flow.mdf;Integrated Security=True" SettingsObjectName="FlowShared.Properties.Settings" SettingsPropertyName="FlowConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Activities" Member="Activities">
+    <Type Name="Activity">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(40) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Version" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Json" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Workflows" Member="Workflows">
+    <Type Name="Workflow">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(40) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Version" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Json" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="Workflow_Execution" Member="Executions" ThisKey="Name,Version" OtherKey="WorkflowName,WorkflowVersion" Type="Execution" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Executions" Member="Executions">
+    <Type Name="Execution">
+      <Column Name="ExecutionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WorkflowName" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="WorkflowVersion" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="DecisionList" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ExecutionStartToCloseTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TaskStartToCloseTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TaskScheduleToStartTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TaskScheduleToCloseTimeout" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="HistorySeen" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeciderAlarm" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="AwaitingDecision" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="LastSeen" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="DeciderToken" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="JobId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Execution_ExecutionState" Member="ExecutionState" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="ExecutionState" Cardinality="One" />
+      <Association Name="Execution_History" Member="Histories" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="History" />
+      <Association Name="Execution_TaskList" Member="TaskLists" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="TaskList" />
+      <Association Name="Execution_Variable" Member="Variables" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="Variable" />
+      <Association Name="Workflow_Execution" Member="Workflow" ThisKey="WorkflowName,WorkflowVersion" OtherKey="Name,Version" Type="Workflow" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExecutionStates" Member="ExecutionStates">
+    <Type Name="ExecutionState">
+      <Column Name="ExecutionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="State" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Association Name="Execution_ExecutionState" Member="Execution" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="Execution" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Histories" Member="Histories">
+    <Type Name="History">
+      <Column Name="ExecutionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EventType" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Timestamp" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="Json" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="Execution_History" Member="Execution" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="Execution" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Servers" Member="Servers">
+    <Type Name="Server">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Server_Worker" Member="Workers" ThisKey="Name" OtherKey="ServerName" Type="Worker" />
+      <Association Name="User_Server" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskLists" Member="TaskLists">
+    <Type Name="TaskList">
+      <Column Name="ListName" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ExecutionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Priority" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaskScheduledEventId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaskToken" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TaskAlarm" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="HeartbeatTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="HeartbeatAlarm" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="WorkerId" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Cancelling" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ScheduledAt" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="TaskSheduleToCloseTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TaskStartToCloseTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Progress" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProgressMessage" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="StartedAt" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="NotificationData" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ProgressData" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="JobId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Execution_TaskList" Member="Execution" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="Execution" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="User_Server" Member="Servers" ThisKey="UserId" OtherKey="UserId" Type="Server" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Variables" Member="Variables">
+    <Type Name="Variable">
+      <Column Name="ExecutionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(40) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Json" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Execution_Variable" Member="Execution" ThisKey="ExecutionId" OtherKey="ExecutionId" Type="Execution" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Workers" Member="Workers">
+    <Type Name="Worker">
+      <Column Name="WorkerId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WorkerName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ServerName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PackageName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Config" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ProcessId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Server_Worker" Member="Server" ThisKey="ServerName" OtherKey="Name" Type="Server" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WorkflowConfigs" Member="WorkflowConfigs">
+    <Type Name="WorkflowConfig">
+      <Column Name="WorkflowName" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="WorkflowVersion" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Json" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
