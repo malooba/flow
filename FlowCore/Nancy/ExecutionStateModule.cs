@@ -41,10 +41,8 @@ namespace FlowCore.Nancy
             log = LogManager.GetLogger(typeof(ExecutionStateModule));
             History history = null;
 
-            Post["/executionstate"] = parameters =>
+            Post["/executionstate/{executionid}"] = parameters =>
             {
-                var qexecutionId = Request.Query["executionid"];
-
                 ExState newState;
                 string command;
 
@@ -92,7 +90,7 @@ namespace FlowCore.Nancy
                     }
                 }
                 Guid executionId;
-                if(!Guid.TryParse(qexecutionId, out executionId))
+                if(!Guid.TryParse(parameters.executionid, out executionId))
                     return new Response().WithStatusCode(HttpStatusCode.BadRequest);
 
                 using(var db = new Database())

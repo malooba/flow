@@ -72,7 +72,7 @@ namespace FlowCore.Nancy
             };
 
             // Store the JSON definition of a specific activity
-            Put["/activities/{name}/versions/{version}"] = parameters =>
+            Put["/activities"] = parameters =>
             {
                 using(var db = new Database())
                 {
