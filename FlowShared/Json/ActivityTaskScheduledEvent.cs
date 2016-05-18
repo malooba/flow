@@ -31,6 +31,8 @@ namespace FlowShared.Json
         public string ActivityVersion;
         [JsonProperty(PropertyName = "taskId")]
         public string TaskId;
+        [JsonProperty(PropertyName = "asyncSignal")]
+        public string AsyncSignal;
         [JsonProperty(PropertyName = "input")]
         public JObject Input;
         [JsonProperty(PropertyName = "taskList")]

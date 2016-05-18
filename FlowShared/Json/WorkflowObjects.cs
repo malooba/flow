@@ -123,15 +123,21 @@ namespace FlowShared.Json
         public string ActivityVersion { get; set; }
 
         /// <summary>
+        /// Asynchronous task signal name
+        /// </summary>
+        [JsonProperty(PropertyName = "asyncSignal", NullValueHandling = NullValueHandling.Ignore, Order = 3)]
+        public string AsyncSignal { get; set; }
+
+        /// <summary>
         /// Inputs to the Task Activity
         /// </summary>
-        [JsonProperty(PropertyName = "inputs", NullValueHandling = NullValueHandling.Ignore, Order = 3)]
+        [JsonProperty(PropertyName = "inputs", NullValueHandling = NullValueHandling.Ignore, Order = 4)]
         public Dictionary<string, InputObj> Inputs { get; set; }
 
         /// <summary>
         /// Outputs from Task Activity
         /// </summary>
-        [JsonProperty(PropertyName = "outputs", NullValueHandling = NullValueHandling.Ignore, Order = 4)]
+        [JsonProperty(PropertyName = "outputs", NullValueHandling = NullValueHandling.Ignore, Order = 5)]
         public Dictionary<string, OutputObj> Outputs { get; set; }
 
         /// <summary>
@@ -175,14 +181,14 @@ namespace FlowShared.Json
         /// <summary>
         /// Task priority
         /// </summary>
-        [JsonProperty(PropertyName = "taskPriority", NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
+        [JsonProperty(PropertyName = "taskPriority", NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
         [DefaultValue(0)]
         public int? TaskPriority { get; set; }
 
         /// <summary>
         /// Internal symbol graphic data
         /// </summary>
-        [JsonProperty(PropertyName = "symbol", NullValueHandling = NullValueHandling.Ignore, Order = 12)]
+        [JsonProperty(PropertyName = "symbol", NullValueHandling = NullValueHandling.Ignore, Order = 14)]
         public SymbolObj Symbol { get; set; }
 
     }

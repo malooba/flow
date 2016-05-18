@@ -46,7 +46,7 @@ namespace FlowCore.Nancy
                 var qexecutionId = Request.Query["executionid"];    // The executionId to get history for (required)
                 var qfrom = Request.Query["fromid"];                // The Id of the event prior to those returned (use 0 or omit to get from the start)
                 var qfor = Request.Query["for"];                    // The number of events to fetch (maximum and default are HISTORY_MAX)
-                var signal = (string)Request.Query["signal"];       // Search for a named asynchronous signal
+                var signal = (string)Request.Query["signal"];       // Search for a named asynchronous signal in entire history (ignore fromid, for)
 
 
                 var f = 0;
@@ -67,16 +67,19 @@ namespace FlowCore.Nancy
                         IEnumerable<string> history;
                         if (signal != null)
                         {
-                            var signals =
-                               (from h in db.Histories
+                            // Search for WorkflowSignalledEvents with the signalName or
+                            // ActivityTaskScheduledEvents with the asynchSignal parameter matching the signalName
+                            var fullHistory =
+                                from h in db.Histories
                                 where h.ExecutionId == executionId &&
-                                      h.EventType == "WorkflowSignalledEvent"
-                                select h).ToList();
+                                      ((h.EventType == "WorkflowSignalledEvent") || (h.EventType == "ActivityTaskScheduledEvent"))
+                                select h;
 
                             history =
-                                signals
-                                    .Where(h => (string) (JObject.Parse(h.Json).SelectToken("signalName")) == signal)
-                                    .Select(h => JsonConvert.SerializeObject(new HistoryJson(h)));
+                                from h in fullHistory.ToList()
+                                where ((h.EventType == "WorkflowSignalledEvent" && (string)(JObject.Parse(h.Json).SelectToken("signalName")) == signal) ||
+                                       (h.EventType == "ActivityTaskScheduledEvent" && (string)(JObject.Parse(h.Json).SelectToken("asyncSignal")) == signal))
+                                select JsonConvert.SerializeObject(new HistoryJson(h));
                         }
                         else
                         {

@@ -32,6 +32,9 @@ namespace FlowShared.Json
         [JsonProperty(PropertyName = "activityVersion")]
         public string ActivityVersion { get; set; }
 
+        [JsonProperty(PropertyName = "asyncSignal")]
+        public string AsyncSignal { get; set; }
+
         [JsonProperty(PropertyName = "input")]
         public JObject Input { get; set; }
 

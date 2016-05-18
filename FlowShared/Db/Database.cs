@@ -322,6 +322,7 @@ namespace FlowShared.Db
                     ActivityVersion = "1.0.0.0",
                     ExecutionId = task.ExecutionId,
                     JobId = task.JobId,
+                    AsyncSignal = null,
                     Input = JObject.Parse(task.NotificationData),
                     TaskToken = task.TaskToken,
                     StartedEventId = 0
@@ -384,6 +385,7 @@ namespace FlowShared.Db
                 ActivityVersion = evt.ActivityVersion,
                 ExecutionId = evt.ExecutionId,
                 JobId = task.JobId,
+                AsyncSignal = evt.AsyncSignal,
                 Input = evt.Input,
                 TaskToken = task.TaskToken,
                 StartedEventId = atse.Id

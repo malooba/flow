@@ -135,7 +135,8 @@ namespace FlowDecider
         {
             var r = new Random();
             var jobId = r.Next(999999);
-            var json = $"{{'workflowName':'adderasynch', 'workflowVersion':'2.0.0.0', 'input':{{ '_job': {{'x':5, 'y':3}}, _jobType: 'test', _jobId: '{jobId}' }}}}";
+            var json = $"{{'workflowName':'NewAsynchTest', 'workflowVersion':'1.0.0.0', 'input':{{ '_job': null, _jobType: 'test', _jobId: '{jobId}' }}}}";
+            //var json = $"{{'workflowName':'adderasynch', 'workflowVersion':'2.0.0.0', 'input':{{ '_job': {{'x':5, 'y':3}}, _jobType: 'test', _jobId: '{jobId}' }}}}";
             // var json = $"{{'workflowName':'testHeartbeat', 'workflowVersion':'1.0.0.0', 'input':{{ '_job': {{'x':5, 'y':3}}, _jobType: 'test', _jobId: '{jobId}' }}}}";
             using(var db = new Database())
                 db.StartWorkflow(json);
@@ -571,6 +572,7 @@ namespace FlowDecider
                 ActivityVersion = task.ActivityVersion,
                 TaskList = task.TaskList ?? activity.DefaultTaskList, // TODO: Should this be overridable in the task definition? Probably!
                 TaskId = task.TaskId,
+                AsyncSignal = task.AsyncSignal,
                 TaskPriority = task.TaskPriority ?? activity.DefaultPriority ?? 0,
                 HeartbeatTimeout = (int?)(task.HeartbeatTimeout ?? activity.DefaultTaskHeartbeatTimeout),
                 ScheduleToCloseTimeout = (int?)(task.ScheduleToCloseTimeout ?? activity.DefaultTaskScheduleToCloseTimeout),

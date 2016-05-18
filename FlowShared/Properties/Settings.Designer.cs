@@ -26,8 +26,7 @@ namespace FlowShared.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Flow.mdf;Inte" +
-            "grated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Flow;Data Source=PORTHLEVEN\\PORTHLEVEN")]
         public string FlowConnectionString {
             get {
                 return ((string)(this["FlowConnectionString"]));
