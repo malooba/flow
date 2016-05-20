@@ -378,6 +378,13 @@ namespace FlowShared.Json
         [JsonProperty(PropertyName = "userDefined", NullValueHandling = NullValueHandling.Ignore, Order = 6)]
         public bool UserDefined
         { get; set; }
+
+        /// <summary>
+        /// If true then this input must be satisfied by the Var and Path settings
+        /// </summary>
+        [JsonProperty(PropertyName = "hidden", NullValueHandling = NullValueHandling.Ignore, Order = 4)]
+        public bool Hidden
+        { get; set; }
     }
 
     /// <summary>

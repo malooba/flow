@@ -36,7 +36,8 @@ namespace FlowCore.Nancy
         /// 
         /// executionid is a required parameter and must be a GUID.
         /// signal is the name of a signal to search for.  This parameter overrides fromid and for.
-        /// fromid and for permit the selection of a restricted range of the unfiltered events 
+        /// signal search will return asynchronous messages and activity task scheduled events that use the signal name.
+        /// fromid and for permit the selection of a restricted range of the unfiltered events.
         /// </summary>
         public HistoryModule()
         {

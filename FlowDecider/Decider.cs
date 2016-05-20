@@ -135,7 +135,7 @@ namespace FlowDecider
         {
             var r = new Random();
             var jobId = r.Next(999999);
-            var json = $"{{'workflowName':'NewAsynchTest', 'workflowVersion':'1.0.0.0', 'input':{{ '_job': null, _jobType: 'test', _jobId: '{jobId}' }}}}";
+            var json = $"{{'workflowName':'TestScript', 'workflowVersion':'1.0.0.0', 'input':{{ '_job': null, _jobType: 'test', _jobId: '{jobId}' }}}}";
             //var json = $"{{'workflowName':'adderasynch', 'workflowVersion':'2.0.0.0', 'input':{{ '_job': {{'x':5, 'y':3}}, _jobType: 'test', _jobId: '{jobId}' }}}}";
             // var json = $"{{'workflowName':'testHeartbeat', 'workflowVersion':'1.0.0.0', 'input':{{ '_job': {{'x':5, 'y':3}}, _jobType: 'test', _jobId: '{jobId}' }}}}";
             using(var db = new Database())
